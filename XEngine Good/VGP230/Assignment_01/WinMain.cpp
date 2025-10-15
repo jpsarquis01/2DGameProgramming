@@ -104,7 +104,6 @@ bool GameLoop(float deltatime)
 	// Do Framework
 	GameRender();
 
-	// Somehow cant run if there is not a exit key, it exits automatically
 	return X::IsKeyPressed(X::Keys::ESCAPE);
 }
 
