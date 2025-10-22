@@ -1,12 +1,16 @@
 #include "Ship.h"
 #include "Bullet.h"
+#include "BulletPool.h"
 
 // Implementation
 Ship::Ship()
 	:Entity()
+	, Collidable(30.0f)
 	, mImageId(0)
 	, mPosition(0.0f)
 	, mRotation(0.0f)
+	, scale(1.0f)
+	, mBulletPool(nullptr)
 {
 
 }
@@ -69,10 +73,32 @@ void Ship::Update(float deltaTime)
 void Ship::Render()
 {
 	X::DrawSprite(mImageId, mPosition, mRotation);
+	X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::Red);
 	mBulletPool.Render();
 }
 
 void Ship::Unload()
 {
 	mBulletPool.Unload();
+}
+
+int Ship::GetType() const
+{
+	return ET_SHIP;
+}
+
+const X::Math::Vector2& Ship::GetPosition() const
+{
+	return mPosition;
+}
+
+void Ship::OnCollition(Collidable* collidable)
+{
+	// Handle collition with other collidable objects
+	XLOG("Ship collided with another object!");
+}
+
+void Ship::SetBulletPool(BulletPool* bulletPool)
+{
+	mBulletPool = *bulletPool;
 }
