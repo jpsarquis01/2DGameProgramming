@@ -10,7 +10,7 @@ Ship::Ship()
 	, mPosition(0.0f)
 	, mRotation(0.0f)
 	, scale(1.0f)
-	, mBulletPool(nullptr)
+	, mBulletPool(NULL)
 {
 
 }
@@ -31,7 +31,7 @@ void Ship::Load()
 	mPosition.x = X::GetScreenWidth() * 0.5f;
 	mPosition.y = X::GetScreenHeight() * 0.5f;
 
-	mBulletPool.Load();
+	SetCollitionFilter(ET_ENEMY | ET_BULLET_ENEMY);
 }
 
 void Ship::Update(float deltaTime)
@@ -63,23 +63,21 @@ void Ship::Update(float deltaTime)
 	if (X::IsKeyPressed(X::Keys::SPACE))
 	{
 		X::Math::Vector2 bulletPos = mPosition + X::Math::Vector2::Forward(mRotation) * 50.0f;
-		Bullet* bullet = mBulletPool.GetBullet();
+		Bullet* bullet = mBulletPool->GetBullet();
+		bullet->SetEntityType(ET_BULLET_PLAYER);
 		bullet->SetActive(bulletPos, mRotation, 3.0f);
 	}
-
-	mBulletPool.Update(deltaTime);
 }
 
 void Ship::Render()
 {
 	X::DrawSprite(mImageId, mPosition, mRotation);
 	X::DrawScreenCircle(mPosition, GetRadius(), X::Colors::Red);
-	mBulletPool.Render();
 }
 
 void Ship::Unload()
 {
-	mBulletPool.Unload();
+
 }
 
 int Ship::GetType() const
@@ -100,5 +98,20 @@ void Ship::OnCollition(Collidable* collidable)
 
 void Ship::SetBulletPool(BulletPool* bulletPool)
 {
-	mBulletPool = *bulletPool;
+	mBulletPool = bulletPool;
+}
+
+int Ship::GetHealth() const
+{
+	return mHealth;
+}
+
+int Ship::GetMaxHealth() const
+{
+	return mMaxHealth;
+}
+
+bool Ship::IsAlive() const
+{
+	return mHealth > 0;
 }

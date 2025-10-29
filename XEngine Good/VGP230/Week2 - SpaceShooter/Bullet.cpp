@@ -6,7 +6,7 @@ Bullet::Bullet()
 	, mImageId(0)
 	, mPosition(0.0f)
 	, mRotation(0.0f)
-	, mlifeTime(2.0f)
+	, mlifeTime(0.0f)
 	, mBulletType(ET_ALL)
 {
 
@@ -56,6 +56,23 @@ void Bullet::SetActive(const X::Math::Vector2& pos, float rotation, float lifeTi
 	mPosition = pos;
 	mRotation = rotation;
 	mlifeTime = lifeTime;
+}
+
+void Bullet::SetEntityType(EntityType entitytype)
+{
+	mBulletType = entitytype;
+	if (entitytype == ET_BULLET_PLAYER)
+	{
+		SetCollitionFilter(ET_ENEMY);
+	}
+	else if (entitytype == ET_BULLET_ENEMY)
+	{
+		SetCollitionFilter(ET_SHIP);
+	}
+	else
+	{
+		SetCollitionFilter(0);
+	}
 }
 
 bool Bullet::IsActive() const

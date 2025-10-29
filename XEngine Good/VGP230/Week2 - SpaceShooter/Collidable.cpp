@@ -39,12 +39,12 @@ bool Collidable::DiCollide(const Collidable* collidable) const
 	int collidableFilter = collidable->GetCollitionFilter();
 	int collisionFilter = GetCollitionFilter();
 
-	if (collidableFilter != 0 || collisionFilter != 0)
+	if (collidableFilter == 0 || collisionFilter == 0)
 	{
 		return false;
 	}
 
-	if (collidableFilter < 0 || collisionFilter < 0 || (collidableFilter & collisionFilter) > 0)
+	if (collidableFilter < 0 || collisionFilter < 0 || (collidableFilter & GetType()) > 0)
 	{
 		float disSq = X::Math::Vector2::SqrMagnitude(collidable->GetPosition() - GetPosition());
 		float radiusSq = X::Math::Sqr(collidable->GetRadius() + GetRadius());
